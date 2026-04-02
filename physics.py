@@ -1,0 +1,59 @@
+import numpy as np
+from config import G
+
+def compute_acceleration(r1, r2, m1, m2):
+    r = r2 - r1
+    distance = np.linalg.norm(r)
+
+    force_dir = r / distance
+    force_mag = G * m1 * m2 / distance**2
+
+    a1 = force_dir * force_mag / m1
+    a2 = -force_dir * force_mag / m2
+
+    return a1, a2
+
+def rk4_step(r1, v1, r2, v2, m1, m2, dt):
+    def derivatives(r1, v1, r2, v2):
+        a1, a2 = compute_acceleration(r1, r2, m1, m2)
+        return v1, a1, v2, a2
+
+    k1_v1, k1_a1, k1_v2, k1_a2 = derivatives(r1, v1, r2, v2)
+
+    k2_v1, k2_a1, k2_v2, k2_a2 = derivatives(
+        r1 + 0.5*dt*k1_v1,
+        v1 + 0.5*dt*k1_a1,
+        r2 + 0.5*dt*k1_v2,
+        v2 + 0.5*dt*k1_a2
+    )
+
+    k3_v1, k3_a1, k3_v2, k3_a2 = derivatives(
+        r1 + 0.5*dt*k2_v1,
+        v1 + 0.5*dt*k2_a1,
+        r2 + 0.5*dt*k2_v2,
+        v2 + 0.5*dt*k2_a2
+    )
+
+    k4_v1, k4_a1, k4_v2, k4_a2 = derivatives(
+        r1 + dt*k3_v1,
+        v1 + dt*k3_a1,
+        r2 + dt*k3_v2,
+        v2 + dt*k3_a2
+    )
+
+    r1_new = r1 + dt*(k1_v1 + 2*k2_v1 + 2*k3_v1 + k4_v1)/6
+    v1_new = v1 + dt*(k1_a1 + 2*k2_a1 + 2*k3_a1 + k4_a1)/6
+
+    r2_new = r2 + dt*(k1_v2 + 2*k2_v2 + 2*k3_v2 + k4_v2)/6
+    v2_new = v2 + dt*(k1_a2 + 2*k2_a2 + 2*k3_a2 + k4_a2)/6
+
+    return r1_new, v1_new, r2_new, v2_new
+def compute_energy(r1, v1, r2, v2, m1, m2):
+    # Kinetic Energy
+    KE = 0.5 * m1 * np.linalg.norm(v1)**2 + 0.5 * m2 * np.linalg.norm(v2)**2
+
+    # Potential Energy
+    r = np.linalg.norm(r2 - r1)
+    PE = -G * m1 * m2 / r
+
+    return KE + PE
