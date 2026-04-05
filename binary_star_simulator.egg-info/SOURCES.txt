@@ -1,0 +1,12 @@
+README.md
+setup.py
+binary_star_simulator/__init__.py
+binary_star_simulator/config.py
+binary_star_simulator/physics.py
+binary_star_simulator/presets.py
+binary_star_simulator/utils.py
+binary_star_simulator.egg-info/PKG-INFO
+binary_star_simulator.egg-info/SOURCES.txt
+binary_star_simulator.egg-info/dependency_links.txt
+binary_star_simulator.egg-info/requires.txt
+binary_star_simulator.egg-info/top_level.txt

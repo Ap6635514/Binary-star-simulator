@@ -1,21 +1,22 @@
 import numpy as np
-from config import G
 
-def compute_acceleration(r1, r2, m1, m2):
+def compute_acceleration(r1, r2, m1, m2, G):
     r = r2 - r1
-    distance = np.linalg.norm(r)
+    dist = np.linalg.norm(r)
 
-    force_dir = r / distance
-    force_mag = G * m1 * m2 / distance**2
+    force_dir = r / dist
+    force = G * m1 * m2 / dist**2
 
-    a1 = force_dir * force_mag / m1
-    a2 = -force_dir * force_mag / m2
+    a1 = force_dir * force / m1
+    a2 = -force_dir * force / m2
 
     return a1, a2
 
-def rk4_step(r1, v1, r2, v2, m1, m2, dt):
+
+def rk4_step(r1, v1, r2, v2, m1, m2, G, dt):
+
     def derivatives(r1, v1, r2, v2):
-        a1, a2 = compute_acceleration(r1, r2, m1, m2)
+        a1, a2 = compute_acceleration(r1, r2, m1, m2, G)
         return v1, a1, v2, a2
 
     k1_v1, k1_a1, k1_v2, k1_a2 = derivatives(r1, v1, r2, v2)
@@ -48,12 +49,3 @@ def rk4_step(r1, v1, r2, v2, m1, m2, dt):
     v2_new = v2 + dt*(k1_a2 + 2*k2_a2 + 2*k3_a2 + k4_a2)/6
 
     return r1_new, v1_new, r2_new, v2_new
-def compute_energy(r1, v1, r2, v2, m1, m2):
-    # Kinetic Energy
-    KE = 0.5 * m1 * np.linalg.norm(v1)**2 + 0.5 * m2 * np.linalg.norm(v2)**2
-
-    # Potential Energy
-    r = np.linalg.norm(r2 - r1)
-    PE = -G * m1 * m2 / r
-
-    return KE + PE

@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./binary_star_simulator"
+    ]
+}

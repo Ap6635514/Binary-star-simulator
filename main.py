@@ -1,82 +1,38 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import argparse
 
 # ==============================
-# CONFIG
+# IMPORT FROM PACKAGE
 # ==============================
-G = 1.0
-dt = 0.01
-steps = 1000   # reduced for faster GIF
-
-m1 = 2.0
-m2 = 0.5
-
-r1 = np.array([-0.2, 0.0])
-v1 = np.array([0.0, -0.3])
-
-r2 = np.array([0.8, 0.0])
-v2 = np.array([0.0, 1.2])
+from binary_star_simulator.presets import equal_mass, unequal_mass
+from binary_star_simulator.utils import compute_energy, compute_barycenter
+from binary_star_simulator.physics import rk4_step
+from binary_star_simulator.config import G, dt, steps
 
 # ==============================
-# PHYSICS
+# CLI ARGUMENT
 # ==============================
+parser = argparse.ArgumentParser()
+parser.add_argument("--preset", type=str, default="unequal")
+args = parser.parse_args()
 
-def compute_acceleration(r1, r2):
-    r = r2 - r1
-    dist = np.linalg.norm(r)
-    force_dir = r / dist
-    force = G * m1 * m2 / dist**2
+if args.preset == "equal":
+    preset = equal_mass()
+else:
+    preset = unequal_mass()
 
-    a1 = force_dir * force / m1
-    a2 = -force_dir * force / m2
-
-    return a1, a2
-
-
-def rk4_step(r1, v1, r2, v2):
-
-    def derivatives(r1, v1, r2, v2):
-        a1, a2 = compute_acceleration(r1, r2)
-        return v1, a1, v2, a2
-
-    k1_v1, k1_a1, k1_v2, k1_a2 = derivatives(r1, v1, r2, v2)
-
-    k2_v1, k2_a1, k2_v2, k2_a2 = derivatives(
-        r1 + 0.5*dt*k1_v1,
-        v1 + 0.5*dt*k1_a1,
-        r2 + 0.5*dt*k1_v2,
-        v2 + 0.5*dt*k1_a2
-    )
-
-    k3_v1, k3_a1, k3_v2, k3_a2 = derivatives(
-        r1 + 0.5*dt*k2_v1,
-        v1 + 0.5*dt*k2_a1,
-        r2 + 0.5*dt*k2_v2,
-        v2 + 0.5*dt*k2_a2
-    )
-
-    k4_v1, k4_a1, k4_v2, k4_a2 = derivatives(
-        r1 + dt*k3_v1,
-        v1 + dt*k3_a1,
-        r2 + dt*k3_v2,
-        v2 + dt*k3_a2
-    )
-
-    r1_new = r1 + dt*(k1_v1 + 2*k2_v1 + 2*k3_v1 + k4_v1)/6
-    v1_new = v1 + dt*(k1_a1 + 2*k2_a1 + 2*k3_a1 + k4_a1)/6
-
-    r2_new = r2 + dt*(k1_v2 + 2*k2_v2 + 2*k3_v2 + k4_v2)/6
-    v2_new = v2 + dt*(k1_a2 + 2*k2_a2 + 2*k3_a2 + k4_a2)/6
-
-    return r1_new, v1_new, r2_new, v2_new
+m1, m2 = preset["m1"], preset["m2"]
+r1, v1 = preset["r1"], preset["v1"]
+r2, v2 = preset["r2"], preset["v2"]
 
 # ==============================
 # SIMULATION
 # ==============================
-
 positions1 = []
 positions2 = []
+energies = []
 
 r1_curr, v1_curr = r1.copy(), v1.copy()
 r2_curr, v2_curr = r2.copy(), v2.copy()
@@ -85,8 +41,13 @@ for _ in range(steps):
     positions1.append(r1_curr.copy())
     positions2.append(r2_curr.copy())
 
+    # Energy tracking
+    energy = compute_energy(r1_curr, v1_curr, r2_curr, v2_curr, m1, m2, G)
+    energies.append(energy)
+
+    # RK4 update
     r1_curr, v1_curr, r2_curr, v2_curr = rk4_step(
-        r1_curr, v1_curr, r2_curr, v2_curr
+        r1_curr, v1_curr, r2_curr, v2_curr, m1, m2, G, dt
     )
 
 positions1 = np.array(positions1)
@@ -95,13 +56,14 @@ positions2 = np.array(positions2)
 # ==============================
 # BARYCENTER
 # ==============================
-
-barycenter = (m1 * positions1 + m2 * positions2) / (m1 + m2)
+barycenter = np.array([
+    compute_barycenter(r1, r2, m1, m2)
+    for r1, r2 in zip(positions1, positions2)
+])
 
 # ==============================
 # ANIMATION
 # ==============================
-
 fig, ax = plt.subplots(figsize=(6,6))
 ax.set_facecolor("black")
 
@@ -134,9 +96,19 @@ def update(frame):
 anim = FuncAnimation(fig, update, frames=steps, interval=10)
 
 # ==============================
-# SAVE + SHOW
+# SAVE GIF
 # ==============================
-
+print("Saving GIF... please wait ⏳")
 anim.save("binary_star.gif", writer="pillow", fps=30)
+
+# ==============================
+# ENERGY GRAPH
+# ==============================
+plt.figure()
+plt.plot(energies)
+plt.title("Total Energy Over Time")
+plt.xlabel("Step")
+plt.ylabel("Energy")
+plt.grid()
 
 plt.show()
