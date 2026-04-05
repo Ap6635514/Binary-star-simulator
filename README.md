@@ -1,6 +1,6 @@
 # 🌌 Binary Star System Simulator
 
-A computational physics simulation of a binary star system using numerical methods and classical mechanics.
+A computational astrophysics project that simulates the motion of binary star systems using numerical methods and classical mechanics.
 
 ---
 
@@ -16,20 +16,22 @@ A computational physics simulation of a binary star system using numerical metho
 * Runge-Kutta (RK4) numerical integration
 * Real-time animation using matplotlib
 * Barycenter (center of mass) visualization
-* Unequal mass system behavior
-* Exportable GIF simulation
+* Energy conservation analysis
+* Multiple system presets (equal, unequal, extreme mass)
+* Packaged as a reusable Python module
 
 ---
 
 ## 🧠 Physics Behind the Simulation
 
-This project is based on fundamental concepts of classical mechanics:
+This project is based on fundamental principles of classical mechanics:
 
 * Newton's Law of Gravitation
 * Two-body problem in celestial mechanics
 * Center of mass (barycenter)
+* Energy conservation
 
-The motion of the stars is governed by gravitational forces and solved using the Runge-Kutta (RK4) method, which provides high accuracy for numerical integration.
+The motion of the stars is computed using the Runge-Kutta (RK4) method, a highly accurate numerical technique for solving differential equations.
 
 In unequal mass systems, the heavier star moves in a smaller orbit while the lighter star follows a larger orbit around the barycenter.
 
@@ -37,10 +39,11 @@ In unequal mass systems, the heavier star moves in a smaller orbit while the lig
 
 ## 🚀 Project Highlights
 
-* Developed a physics-based simulation from scratch
+* Built a physics-based simulation from scratch
 * Implemented RK4 numerical integration
 * Visualized orbital motion with animation
-* Modeled realistic astrophysical behavior
+* Verified simulation accuracy using energy conservation
+* Structured the project as a Python package
 
 ---
 
@@ -49,14 +52,47 @@ In unequal mass systems, the heavier star moves in a smaller orbit while the lig
 * Python
 * NumPy
 * Matplotlib
+* Pillow
 
 ---
 
-## ⚙️ How to Run
+## 📦 Installation
+
+Clone the repository:
 
 ```bash
-pip install numpy matplotlib pillow
-python main.py
+git clone https://github.com/ap6635514/binary-star-simulator.git
+cd binary-star-simulator
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+(Optional) Install as a package:
+
+```bash
+pip install .
+```
+
+---
+
+## ▶️ Usage
+
+Run the simulation with different presets:
+
+```bash
+python main.py --preset equal
+```
+
+```bash
+python main.py --preset unequal
+```
+
+```bash
+python main.py --preset extreme
 ```
 
 ---
@@ -66,7 +102,8 @@ python main.py
 * Animated binary star motion
 * Orbit trails
 * Barycenter visualization
-* GIF file (`binary_star.gif`)
+* Energy vs time graph
+* Exported GIF (`binary_star.gif`)
 
 ---
 
@@ -78,10 +115,10 @@ To understand how binary star systems behave using computational methods and vis
 
 ## 🔮 Future Improvements
 
-* Extend to N-body simulation
-* Add energy conservation plots
-* Improve visualization with interactive UI
-* Simulate galaxy formation
+* Extend to N-body simulation (galaxy modeling)
+* Add interactive controls (UI)
+* Improve visualization with advanced rendering
+* Integrate real astronomical data
 
 ---
 
@@ -93,10 +130,11 @@ This project simulates how two stars move around each other in space using physi
 
 ## 🚀 One-Line Pitch
 
-Developed a binary star system simulator using RK4 numerical integration to model gravitational interactions and visualize orbital dynamics.
+Developed and packaged a binary star system simulator using RK4 numerical integration to model gravitational interactions and visualize orbital dynamics.
 
 ---
 
 ## 👨‍💻 Author
 
-Abhishek — Aspiring Astrophysicist 🚀
+**Abhishek** — Aspiring Astrophysicist 🚀
+
