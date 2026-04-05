@@ -4,6 +4,12 @@ A computational physics simulation of a binary star system using numerical metho
 
 ---
 
+## 🎬 Simulation Preview
+
+![Binary Star Simulation](binary_star.gif)
+
+---
+
 ## 🚀 Features
 
 * Simulation of two-body gravitational interaction
@@ -11,25 +17,38 @@ A computational physics simulation of a binary star system using numerical metho
 * Real-time animation using matplotlib
 * Barycenter (center of mass) visualization
 * Unequal mass system behavior
-* GIF export for visualization
+* Exportable GIF simulation
 
 ---
 
-## 🧠 Physics Concepts
+## 🧠 Physics Behind the Simulation
 
-This project is based on:
+This project is based on fundamental concepts of classical mechanics:
 
 * Newton's Law of Gravitation
 * Two-body problem in celestial mechanics
-* Center of Mass (Barycenter)
-* Energy conservation
-* Numerical integration (RK4)
+* Center of mass (barycenter)
+
+The motion of the stars is governed by gravitational forces and solved using the Runge-Kutta (RK4) method, which provides high accuracy for numerical integration.
+
+In unequal mass systems, the heavier star moves in a smaller orbit while the lighter star follows a larger orbit around the barycenter.
 
 ---
 
-## 🎥 Demo
+## 🚀 Project Highlights
 
-![Simulation](binary_star.gif)
+* Developed a physics-based simulation from scratch
+* Implemented RK4 numerical integration
+* Visualized orbital motion with animation
+* Modeled realistic astrophysical behavior
+
+---
+
+## ⚙️ Technologies Used
+
+* Python
+* NumPy
+* Matplotlib
 
 ---
 
@@ -46,6 +65,7 @@ python main.py
 
 * Animated binary star motion
 * Orbit trails
+* Barycenter visualization
 * GIF file (`binary_star.gif`)
 
 ---
@@ -53,6 +73,27 @@ python main.py
 ## 📌 Project Goal
 
 To understand how binary star systems behave using computational methods and visualize their motion in a physically accurate way.
+
+---
+
+## 🔮 Future Improvements
+
+* Extend to N-body simulation
+* Add energy conservation plots
+* Improve visualization with interactive UI
+* Simulate galaxy formation
+
+---
+
+## 💡 Simple Explanation
+
+This project simulates how two stars move around each other in space using physics and code, showing their orbits and interaction visually.
+
+---
+
+## 🚀 One-Line Pitch
+
+Developed a binary star system simulator using RK4 numerical integration to model gravitational interactions and visualize orbital dynamics.
 
 ---
 
